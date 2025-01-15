@@ -1,0 +1,28 @@
+---
+- name: Install and Configure Nginx
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Check Python version
+      command: python3 --version
+      register: python_version
+
+    - debug:
+        var: python_version.stdout
+
+    - name: Install nginx
+      package:
+        name: nginx
+        state: present
+
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Create a simple HTML file
+      copy:
+        content: "<html><body><h1>Hello from Ansible!</h1></body></html>"
+        dest: /var/www/html/index.html

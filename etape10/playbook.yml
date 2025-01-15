@@ -1,0 +1,31 @@
+---
+- name: Install and Configure Nginx
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Check Python version
+      command: python3 --version
+      register: python_version
+
+    - debug:
+        var: python_version.stdout
+
+    - name: Install nginx
+      package:
+        name: nginx
+        state: present
+
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy index.html file
+      copy:
+        src: ./index.html  # Path to your local index.html file
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'

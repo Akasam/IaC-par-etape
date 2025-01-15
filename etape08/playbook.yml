@@ -1,0 +1,47 @@
+---
+- name: Install and Configure Nginx
+  hosts: http
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install nginx
+      package:
+        name: nginx
+        state: present
+
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+- name: Install and Configure PHP FPM
+  hosts: script
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install PHP
+      package:
+        name: php-fpm
+        state: present
+
+    - name: Update www.conf file
+      copy:
+        src: ./www.conf
+        dest: /etc/php/8.3/fpm/pool.d/www.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart php-fpm
+      systemd:
+        name: php8.3-fpm
+        state: restarted

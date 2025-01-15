@@ -1,0 +1,10 @@
+plugin: aws_ec2
+regions:
+  - eu-west-3
+keyed_groups:
+  - key: tags
+  - key: instance_type
+hostnames:
+  - public_ip_address
+compose:
+  ansible_host: public_ip_address
