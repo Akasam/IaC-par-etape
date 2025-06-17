@@ -11,6 +11,10 @@
     - debug:
         var: python_version.stdout
         
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
     - name: Install nginx
       package:
         name: nginx
